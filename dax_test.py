@@ -13,7 +13,7 @@ dynamo = session.resource('dynamodb')
 TABLE_NAME = "perftest"
 key = "key"
 table = dynamo.Table(TABLE_NAME)
-dax = amazondax.AmazonDaxClient(session, region_name='ap-northeast-1', endpoints=[p[3]])
+dax = amazondax.AmazonDaxClient.resource(session, region_name='ap-northeast-1', endpoints=[p[3]])
 
 async def get_item(k, wait):
     for i in range(100):
