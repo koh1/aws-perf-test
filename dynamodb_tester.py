@@ -4,18 +4,11 @@ import datetime
 from boto3.session import Session
 
 p = sys.argv
-session = Session(aws_access_key_id=p[1], aws_secret_access_key=p[2])
+session = Session(aws_access_key_id=p[1], aws_secret_access_key=p[2], region_name="ap-northeast-1")
 dynamo = session.resource('dynamodb')
 TABLE_NAME = "perftest"
 key = "key"
 table = dynamo.Table(TABLE_NAME)
-
-
-def put_item(key, value):
-    pass
-
-def get_item(key):
-    return ""
 
 async def increment(thread_name, key, n, wait):
     for i in range(100):
@@ -32,12 +25,7 @@ async def increment(thread_name, key, n, wait):
             },
             ReturnValues="UPDATED_NEW"
         )
-        #print("Thread: %s, Key=%s, Item=%s"%(thread_name, key, res['Attributes']['count']))
         await asyncio.sleep(wait)
-
-def decrement(key, n):
-    pass
-
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
@@ -45,8 +33,8 @@ if __name__ == '__main__':
         "key": "allowed",
         "count": 0
     })
-    t0 = datetime.datetime.now()
 
+    t0 = datetime.datetime.now()
     result = loop.run_until_complete(asyncio.gather(
         increment("th1", "allowed", 1, 0.002),
         increment("th2", "allowed", 1, 0.002),
